@@ -1,9 +1,5 @@
 
-# Documentor = require 'lib/Documentor'
-# EventEmitter = require('events').EventEmitter
 should = require 'should'
-# fs = require 'fs'
-
 babel = require '../babel'
 
 describe 'service', ->
