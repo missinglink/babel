@@ -95,18 +95,6 @@ describe 'message transport', ->
 
 describe 'event transport', ->
 
-  # it 'should be possible to use the same event name on client & server', (done) ->
-
-  #   s = {}
-  #   service = babel.service 'webserver', { via: 'tcp' }, ( server ) -> s = server
-  #   service.on 'test.event', (message) ->
-  #     message.should.eql { test: 'data' }
-  #     s.close() && done()
-  #   service.bind()
-
-  #   client = babel.client 'webserver', { via: 'tcp' }
-  #   client.on 'connect', ( socket ) -> client.emit 'test.event', { test: 'data' }
-
   it 'should send events: client -> server', (done) ->
 
     s = {}

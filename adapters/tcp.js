@@ -49,39 +49,24 @@ module.exports = function(){
       var proxy = new EventEmitter();
 
       var server = net.createServer( function ( socket ){
-        // console.log('server created');
 
         bus.send = function( message ) {
-          console.log( 'server send:', message );
           socket.write( 'json>>' + JSON.stringify( message ) + '<<json' );
         };
-
-        // bus.onAny( function( message ){
-        //   if( ['connect','error','data','message'].indexOf(bus.event) == -1 ) {
-        //     socket.write( 'event>>' + JSON.stringify({ proto: bus.event, body: message }) + '<<event' );
-        //   }
-        // });
 
         var anyBack = function( message ){
           if( ['connect','error','data','message'].indexOf(bus.event) == -1 ) {
             socket.write( 'event>>' + JSON.stringify({ proto: bus.event, body: message }) + '<<event' );
-            console.log( 'bus.onAny', bus.event );
           }
         };
 
         proxy.onAny( function( message ){
-          console.log( 'proxy.onAny', bus.event );
           bus.offAny( anyBack );
           bus.emit( proxy.event, message );
           bus.onAny( anyBack );
         });
 
         bus.onAny( anyBack );
-
-        // bus.on( 'test.event2', function( message ) {
-        //   console.log( 'write', message );
-        //   socket.write( 'event>>' + JSON.stringify({ proto: 'test.event', body: message }) + '<<event' );
-        // });
 
         bus.emit( 'connect', socket );
         // socket.on( 'data', function( data ){ bus.emit( 'data', data ); });
@@ -110,7 +95,6 @@ module.exports = function(){
 
 
       var socket = new net.connect({ port: port }, function(){
-        // console.log("client connected.");
         bus.emit( 'connect', socket );
       });
 
@@ -126,19 +110,13 @@ module.exports = function(){
         socket.write( 'json>>' + JSON.stringify( message ) + '<<json' );
       };
 
-      // bus.on( 'test.event2', function( message ) {
-      //   socket.write( 'event>>' + JSON.stringify({ proto: 'test.event', body: message }) + '<<event' );
-      // });
-
       var anyBack = function( message ){
         if( ['connect','error','data','message'].indexOf(bus.event) == -1 ) {
           socket.write( 'event>>' + JSON.stringify({ proto: bus.event, body: message }) + '<<event' );
-          console.log( 'bus.onAny', bus.event );
         }
       };
 
       proxy.onAny( function( message ){
-        console.log( 'proxy.onAny', bus.event );
         bus.offAny( anyBack );
         bus.emit( proxy.event, message );
         bus.onAny( anyBack );
@@ -157,11 +135,5 @@ module.exports = function(){
 
       return socket;
     }
-  }
-}
-
-
-    // var client = new net.connect({ port: 9999 }, function(){
-    //   console.log("client connected.");
-    //   client.write('hello\r\n');
-    // });
+  };
+};
